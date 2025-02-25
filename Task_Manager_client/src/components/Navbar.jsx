@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setOpenSidebar } from "../redux/slices/authSlice";
+import { setCredentials, setOpenSidebar } from "../redux/slices/authSlice";
 import { MdOutlineSearch } from "react-icons/md";
 import UserAvatar from "./UserAvatar";
 import Notification from "./Notification";
+import { user } from "../assets/data";
 
 const Navbar = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user:user2 } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  useEffect(()=>{
+    console.log( "user is **********-----------" ,user)
+    dispatch(setCredentials(user))
+  },[])
+  
 
   return (
     <div className="flex justify-between items-center bg-white px-4 py-3 2xl:py-4 sticky z-10 top-0">

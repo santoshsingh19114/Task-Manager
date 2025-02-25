@@ -15,10 +15,11 @@ import { Transition } from "@headlessui/react";
 import { setOpenSidebar } from "./redux/slices/authSlice";
 import { IoClose } from "react-icons/io5";
 import clsx from "clsx";
+;
 
 function Layout() {
-  const user =" "
-  // const {user} = useSelector((state)=>state.auth);
+  // const user =" "
+  const {user} = useSelector((state)=>state.auth);
  
   const location = useLocation();
 
@@ -104,7 +105,7 @@ function App() {
         <Route element={<Layout />}>
           <Route index path="/" element={<Navigate to="/Dashboard" />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/task" element={<Task />} />
+          <Route path="/tasks" element={<Task />} />
           <Route path="/completed/:status " element={<Task />} />
           <Route path="/inprogress/:status " element={<Task />} />
           <Route path="/todos/:status " element={<Task />} />

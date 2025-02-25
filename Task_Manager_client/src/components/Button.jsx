@@ -13,4 +13,4 @@ const Button = ({icon,className,type,label,onclick=()=>{} }) => {
   )
 }
 
-export default Button
+export default Button;
