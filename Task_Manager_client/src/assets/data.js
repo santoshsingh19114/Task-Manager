@@ -1101,7 +1101,7 @@ export const summary = {
   
   export const user = {
     _id: "662f32ffd1303cc",
-    name: "Codewave",
+    name: "Santosh",
     title: "Administrator",
     role: "Admin",
     email: "admin@mts.com",
