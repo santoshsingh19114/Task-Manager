@@ -41,9 +41,9 @@ const Task = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const status = params?.status || "error";
-  console.log("Route Params:", params);
-  console.log("Status:", status); // Check if status is passed
+  const status = params?.status||""
+  // console.log("Route Params:", params);
+  // console.log("Status:", status); 
 
   
 
