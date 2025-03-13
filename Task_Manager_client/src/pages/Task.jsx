@@ -11,6 +11,9 @@ import TaskTitle from "../components/TaskTitle";
 import {tasks} from "../assets/data"
 import Boardview from "../components/Boardview";
 import Table from "../components/task/Table";
+import AddTask from "../components/task/AddTask";
+// import AddSubTask from "../components/task/AddSubTask";
+// import AddUser from "../components/AddUser";
 
 
 const TABS = [
@@ -33,15 +36,15 @@ const TASK_TYPE = {
 const Task = () => {
   const params = useParams();
   const location = useLocation();
-  console.log("Current Path:", location.pathname);
-  console.log("Route Params:", params); 
-  console.log("Route Params:", params); 
+  // console.log("Current Path:", location.pathname);
+  // console.log("Route Params:", params); 
+  // console.log("Route Params:", params); 
 
   const [selected, setselected] = useState(0);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const status = params?.status||""
+  // const status = params?.status||""
   // console.log("Route Params:", params);
   // console.log("Status:", status); 
 
@@ -65,7 +68,8 @@ const Task = () => {
         <Title title={status ? `${status} Tasks` : "Tasks"} />
 
         {!status && (
-          <Button
+          <Button 
+          onClick={()=>setOpen(true)}
             label="Create Task"
             icon={<IoMdAdd className="text-lg " />}
             className="flex flex-row reverse gap-1 items-center bg-blue-600 text-white rounded-md py-2 2xl:py-2.5"
@@ -91,6 +95,8 @@ const Task = () => {
           </div>
         }
         </Tabs>  
+
+        <AddTask open={open} setOpen={setOpen}/>
       </div>
     </div>
   );

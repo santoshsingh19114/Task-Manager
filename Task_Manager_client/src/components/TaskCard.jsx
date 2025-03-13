@@ -13,6 +13,7 @@ import { BiMessageAltDetail } from "react-icons/bi";
 import { FaList } from "react-icons/fa";
 import UserInfo from "./UserInfo";
 import { IoMdAdd } from "react-icons/io";
+import AddSubTask from "./task/AddSubTask";
 
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
@@ -22,7 +23,7 @@ const ICONS = {
 
 const TaskCard = ({ task }) => {
   const { user } = useSelector((state) => state.auth);
-  const [open, setopen] = useState(false);
+  const [open, setOpen] = useState(false);
   return (
     <>
       <div className="w-full h-fit bg-white shadow-md p-4 rounded">
@@ -115,9 +116,12 @@ const TaskCard = ({ task }) => {
 
 
             
-            <button disabled={user.isAdmin?false:true}
+            <button
+             onClick={()=>setOpen(true)}
+            disabled={user.isAdmin?false:true}
             className="w-full flex gap-4 items-center text-sm text-gray-500 font-semibold disabled:cursor-not-allowed::text-gray-300">
-                <IoMdAdd className="text-lg"/>
+                <IoMdAdd className="text-lg"
+               />
                 <span>ADD SUBTASKS</span>
             </button>
 
@@ -133,7 +137,7 @@ const TaskCard = ({ task }) => {
 
       </div>
 
-      {/* <AddSubTask open={open} setOpen={setOpen} id={task._id}/> */}
+      <AddSubTask open={open} setOpen={setOpen} id={task._id}/>
     </>
   );
 };

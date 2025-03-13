@@ -113,7 +113,7 @@ function App() {
 
           <Route path='/team' element={<Users />} />
           <Route path="/trashed" element={<Trash />} />
-          <Route path="/task:id" element={<Taskdetail />} />
+          <Route path="/task/:id" element={<Taskdetail />} />
         </Route>
 
         <Route path="/Log-in" element={<Login />} />

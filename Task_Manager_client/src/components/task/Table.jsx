@@ -7,6 +7,7 @@ import {
   MdKeyboardArrowUp,
   MdKeyboardDoubleArrowUp,
 } from "react-icons/md";
+import ConfirmatioDialog from "../Dialogs";
 
 import { toast } from "sonner";
 import { BGS, formatDate, PRIOTITYSTYELS, TASK_TYPE } from "../../utils";
@@ -25,7 +26,14 @@ const Table = ({ tasks }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  const deleteClicks=()=>{};
+  const deleteClicks=(id)=>{
+
+    setSelected(id);
+    setOpenDialog(true);
+  };
+
+
+  const deleteHandler=()=>{}
 
   const TableHeader = () => (
     <thead className="border-b border-gray-300 ">
@@ -109,7 +117,7 @@ const Table = ({ tasks }) => {
         className="text-blue-600 hover:text-blue-500  sm:px-0 text-sm md:text-base"
         label="Delete"
         type='button'
-        onclick={()=>deleteClicks(task._id)}
+        onClick={()=>deleteClicks(task._id)}
         />
       </td>
 
@@ -132,14 +140,11 @@ const Table = ({ tasks }) => {
       </div>
 
 
-      {/* <ConfirmationDialog
-      open={showConfirmationDialog}
-      setOpen={setShowConfirmationDialog}
-      title="Delete Task"
-      message="Are you sure you want to delete this task?"
-      confirmLabel="Delete"
-      onclick={deleteHandler}
-      /> */}
+      <ConfirmatioDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        onClick={deleteHandler}
+      />
 
     </>
   );
