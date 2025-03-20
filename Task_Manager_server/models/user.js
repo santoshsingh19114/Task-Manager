@@ -21,14 +21,14 @@ userSchema.pre("save",async function (next){
         next();
     }
 
-    const salt=await bcrypy.genSalt(10)
-    this.password=await bcrypy.hash(this.password,salt);
+    const salt=await bcrypt.genSalt(10)
+    this.password=await bcrypt.hash(this.password,salt);
 
 });
 
 
 userSchema.method.matchPassword=async function(enteredPassword){
-    return await bcrypy.compare(enteredPassword,this.password);
+    return await bcrypt.compare(enteredPassword,this.password);
 };
 
 const User=mongoose.model("user",userSchema);
