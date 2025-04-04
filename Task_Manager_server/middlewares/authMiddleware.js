@@ -1,8 +1,11 @@
 import jwt from "jsonwebtoken"
+import User from "../models/user.js"; 
 
-const protectRoute=async(req,resizeBy,next)=>{
+
+const protectRoute=async(req,res,next)=>{
     try{
-        let token=resizeBy.cookie.token;
+        let token=req.cookies?.token;
+
 
 
         if(token){
@@ -17,6 +20,12 @@ const protectRoute=async(req,resizeBy,next)=>{
             userId:decodedtoken.userId ,           }
 
             next();
+        }
+        else
+        {
+            return res.status(401)
+            .json({status:false,message:"not authorised .try login again"})
+
         }
 
     }

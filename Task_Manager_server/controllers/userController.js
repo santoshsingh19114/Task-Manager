@@ -9,7 +9,7 @@ export const registerUser = async (req, res) => {
     const userExist = await User.findOne({ email });
     if (userExist) {
       return res.status(400).json({
-        status: false,
+        status: false,  
         msg: "User already exist",
       });
     }
@@ -22,13 +22,29 @@ export const registerUser = async (req, res) => {
       role,
       title,
     });
-
+        
     if (user) {
-      isAdmin ? createJWT(req, user._id) : null;
+      console.log("isAdmin value:", isAdmin);
+      try {
+        if (isAdmin) {
+          console.log("Creating JWT...");
+          createJWT(res, user._id);
+          console.log("JWT created successfully.");
+        }
+      } catch (error) {
+        console.error("JWT Error:", error);
+      }
+
+      // isAdmin ? createJWT(req, user._id) : null;
+      
 
       user.password = undefined;
 
-      res.status(201).json(user);
+      res.status(200).json({ 
+        status: true, 
+        message: "Registering user", 
+        user 
+      });
     } else {
       return res
         .status(400)
@@ -62,7 +78,12 @@ export const loginUser = async (req, res) => {
     const isMatch = await user.matchPassword(password);
 
     if (user && isMatch) {
+      console.log("creating jwt");
       createJWT(res, user._id);
+
+      console.log("created jwt succesfully");
+
+
       user.password = undefined;
 
       res.status(200).json(user);
