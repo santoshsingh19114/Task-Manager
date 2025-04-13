@@ -7,6 +7,13 @@ import { getInitials } from "../utils";
 import clsx from "clsx";
 import ConfirmatioDialog, { UserAction } from "../components/Dialogs";
 import AddUser from "../components/AddUser";
+import {
+  useDeleteUserMutation,
+  useGetteamListQuery,
+  useUserActionMutation,
+} from "../redux/slices/apis/userApiSlice";
+import { isAction } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 
 const Users = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -14,9 +21,48 @@ const Users = () => {
   const [openAction, setOpenAction] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  const userActionHandler = () => {};
-  const deleteHandler = () => {};
+  const { data, isLoading, refetch } = useGetteamListQuery();
+  const [deleteUser] = useDeleteUserMutation();
+  const [userAction] = useUserActionMutation();
 
+  // console.log(data,error);
+  const userActionHandler = async () => {
+    try {
+      const result = await userAction({
+        isActive: !selected?.isActive,
+        id: selected?._id,
+      }).unwrap();
+
+      refetch();
+
+      toast.success(result?.message || "User status updated successfully");
+
+
+      setSelected(null);
+      setTimeout(() => {
+        setOpenAction(false);
+      }, 500);
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+  const deleteHandler = async () => {
+    try {
+      const result = await deleteUser(selected).unwrap();
+
+      refetch();
+
+      toast.success("deleted successfully");
+      setSelected(null);
+      setTimeout(() => {
+        setOpenDialog(false);
+      }, 500);
+    } catch (error) {
+      console.log(err);
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   useEffect(() => {
     console.log("Users open state changed:", open);
@@ -33,6 +79,12 @@ const Users = () => {
     setOpen(true);
     console.log("After setting open:", open);
   };
+
+
+  const userStatusClick=(el)=>{
+    setSelected(el);
+    setOpenAction(true);
+  }
 
   const TableHeader = () => (
     <thead className="border-b border-gray-300">
@@ -65,6 +117,9 @@ const Users = () => {
 
       <td>
         <button
+        
+        onClick={()=>userStatusClick(user)}
+
           className={clsx(
             "w-fit px-4 py-1 rounded-full",
             user?.isActive ? "bg-blue-200" : "bg-yellow-100"
@@ -98,13 +153,15 @@ const Users = () => {
         <div className="flex items-center justify-between mb-8">
           <Title title="Team Members" />
           <Button
-            onClick={() => setOpen(true)}
-            label='Add New User'
-            icon={<IoMdAdd className='text-lg' />}
-            className='flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md 2xl:py-2.5'
+            onClick={() => {
+              setSelected(null); // 🧹 Clear userData
+              setOpen(true);
+            }}
+            label="Add New User"
+            icon={<IoMdAdd className="text-lg" />}
+            className="flex flex-row-reverse gap-1 items-center bg-blue-600 text-white rounded-md 2xl:py-2.5"
           />
 
-          
           {/* <Button
             label="Add New User"
             onClick={() => {
@@ -120,7 +177,7 @@ const Users = () => {
             <table className="w-full mb-5">
               <TableHeader />
               <tbody>
-                {summary.users?.map((user, index) => (
+                {data?.map((user, index) => (
                   <TableRow key={index} user={user} />
                 ))}
               </tbody>
@@ -129,7 +186,7 @@ const Users = () => {
         </div>
       </div>
 
-      <AddUser open={open} setOpen={setOpen} userData={selected} />
+      <AddUser open={open} setOpen={setOpen} userData={selected} refetchUsers={refetch}/>
 
       <ConfirmatioDialog
         open={openDialog}

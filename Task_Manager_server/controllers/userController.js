@@ -60,8 +60,12 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    console.log(email);
+    console.log(password);
+    
 
+    const user = await User.findOne({ email });
+    console.log(user);
     if (!user) {
       return res
         .status(401)
@@ -74,9 +78,9 @@ export const loginUser = async (req, res) => {
         message: "Your account is not active, please contact the admin",
       });
     }
-
+    console.log("beforeisMatch");
     const isMatch = await user.matchPassword(password);
-
+    console.log(isMatch);
     if (user && isMatch) {
       console.log("creating jwt");
       createJWT(res, user._id);
@@ -112,7 +116,7 @@ export const logoutUser = async (req, res) => {
 
 export const getTeamList = async (req, res) => {
   try {
-    const users = await user.find().select("name title role email isActive");
+    const users = await User.find().select("name title role email isActive");
 
     res.status(200).json(users);
   } catch (error) {
@@ -144,6 +148,12 @@ export const updateUserProfile = async (req, res) => {
   try {
     const { userId, isAdmin } = req.user;
     const { _id } = req.body;
+    
+
+
+    console.log("req.user:", req.user); // 👈 userId and isAdmin
+console.log("req.body._id:", req.body._id);
+
 
     const id =
       isAdmin && userId === _id
@@ -152,6 +162,9 @@ export const updateUserProfile = async (req, res) => {
         ? _id
         : userId;
 
+
+        console.log("Final id for update:", id);
+
     const user = await User.findById(id);
 
     if (user) {
@@ -159,7 +172,7 @@ export const updateUserProfile = async (req, res) => {
       user.title = req.body.title || user.title;
       user.role = req.body.role || user.role;
 
-      const updatedUser = await User.Save();
+      const updatedUser = await user.save();
 
       user.password = undefined;
 

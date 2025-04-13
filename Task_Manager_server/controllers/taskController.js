@@ -49,7 +49,6 @@ export const createTask = async (req, res) => {
   }
 };
 
-
 export const duplicateTask = async (req, res) => {
   try {
     const { id } = req.paramms;
@@ -72,7 +71,7 @@ export const duplicateTask = async (req, res) => {
     let text = "New task has been assigned to you";
 
     if (task.team.length > 1) {
-      textext + `and ${task.team.length - 1} others`;
+      text + `and ${task.team.length - 1} others`;
     }
 
     text =
@@ -121,6 +120,8 @@ export const postTaskactivity = async (req, res) => {
 export const dashboardStatistics = async (req, res) => {
   try {
     const { userId, isAdmin } = req.user;
+    // console.log(userId);
+    // console.log(isAdmin);
 
     const allTasks = isAdmin
       ? await Task.find({
@@ -140,6 +141,8 @@ export const dashboardStatistics = async (req, res) => {
             select: "name role title,email",
           })
           .sort({ _id: -1 });
+
+    console.log(allTasks);
 
     const users = await User.find({ isActive: true })
       .select("name title role isAdmin created")
@@ -173,6 +176,7 @@ export const dashboardStatistics = async (req, res) => {
 
     //calculate total tasks
     const totalTasks = allTasks?.length;
+    console.log(totalTasks);
     const last10Task = allTasks?.slice(0, 10);
 
     const summary = {
@@ -229,7 +233,6 @@ export const getTasks = async (req, res) => {
   }
 };
 
-
 export const getTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -244,10 +247,12 @@ export const getTask = async (req, res) => {
         select: "name",
       });
 
-    res.status(200).json({
+      console.log(task);
+      res.status(200).json({
       status: true,
       task,
     });
+
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });
@@ -259,7 +264,7 @@ export const createSubTask = async (req, res) => {
     const { title, tag, date } = req.body;
     const { id } = req.params;
 
-    const newsubTask = {
+    const newSubTask = {
       title,
       date,
       tag,
@@ -305,25 +310,20 @@ export const updateTask = async (req, res) => {
   }
 };
 
-export const trashTask = async(req,res)=>{
-    try{
-      const {id}=req.params;
+export const trashTask = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-      const task=await Task.findById(id);
+    const task = await Task.findById(id);
 
+    task.isTrashed = true;
 
-      task.IsTrashed=true;
-
-      await task.save();
-
-    }
-    catch(error){
-        console.log(error);
-        return res.status(400).json({status:false,message:error.message});
-
-    }
-}
-
+    await task.save();
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ status: false, message: error.message });
+  }
+};
 
 export const deleteRestoreTask = async (req, res) => {
   try {

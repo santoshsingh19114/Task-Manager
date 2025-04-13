@@ -5,16 +5,35 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getInitials } from "../utils";
+import { toast } from "sonner";
+import { useLogoutMutation } from "../redux/slices/apis/authApiSlice";
+import { logout } from "../redux/Slices/authSlice";
+import ChangePassword from "./ChangePassword";
+import AddUser from "./AddUser";
 
 const UserAvatar = () => {
   const [open, setOpen] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
   const { user } = useSelector((state) => state.auth);
-  const patch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const logoutHandler = () => {
-    console.log("logout");
+  const [logoutUser]=useLogoutMutation();
+
+  const logoutHandler = async() => {
+    try{
+      // console.log("logout se pehle")
+      await logoutUser().unwrap();
+      // console.log("logout se baad")
+      dispatch(logout());
+      // console.log("dispatch ke baad")
+
+      navigate("/Log-in");
+      toast.success("Logout Successfully");
+
+    }catch(error){
+      toast.error("something went wrong")
+    }
   };
 
   return (
@@ -80,6 +99,10 @@ const UserAvatar = () => {
           </Transition>
         </Menu>
       </div>
+
+
+      <AddUser open={open} setOpen={setOpen} userData={user}/>
+      <ChangePassword open={openPassword} setOpen={setOpenPassword} />
     </>
   );
 };

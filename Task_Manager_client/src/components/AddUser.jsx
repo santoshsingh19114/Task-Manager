@@ -1,28 +1,111 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModalWrapper from "./ModalWrapper";
 import { Dialog } from "@headlessui/react";
 import Textbox from "./Textbox";
 import Loading from "./Loader";
 import Button from "./Button";
+import { toast } from "sonner";
+import { useRegisterMutation } from "../redux/slices/apis/authApiSlice";
+import { useUpdateUserMutation } from "../redux/slices/apis/userApiSlice";
+import { setCredentials } from "../redux/Slices/authSlice";
 
-const AddUser = ({ open, setOpen, userData }) => {
+const AddUser = ({ open, setOpen, userData , refetchUsers}) => {
   console.log("AddUser dialog state:", open);
 
   let defaultValues = userData ?? {};
+  console.log("defaultvalues:" ,defaultValues);
   const { user } = useSelector((state) => state.auth);
 
-  const isLoading = false,
-    isUpdating = false;
+  
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ defaultValues });
+    reset, // ✅ yeh add kar
+  } = useForm({
+    defaultValues: {
+      name: "",
+      title: "",
+      email: "",
+      role: "",
+    },
+  });
 
-  const handleOnSubmit = () => {};
+  // import { useEffect } from "react";
+
+useEffect(() => {
+  if (userData) {
+    reset({
+      name: userData.name || "",
+      title: userData.title || "",
+      email: userData.email || "",
+      role: userData.role || "",
+    });
+  }
+}, [userData, reset]);
+
+
+  const dispatch=useDispatch();
+
+  const [addNewUser,{isLoading}]=useRegisterMutation();
+
+  const [updateUser,{isLoading:isUpdating}]=useUpdateUserMutation();
+
+  const handleOnSubmit = async(data) => {
+    try{
+
+
+      if (data.email !== userData.email) {
+        toast.warning("Email can't be updated. Only Name, Title, and Role can be changed.");
+        return;
+      }
+
+
+      if(userData){
+        // userData console.log karke dekh
+console.log("userData:", userData);
+
+// data bhi dekh le
+console.log("form data:", data);
+
+      console.log("handle on submit if ke ander ja rha h ")
+      const result = await updateUser({ ...data, _id: userData._id }).unwrap();
+
+
+      console.log("form data:", { ...data, _id: userData._id });
+        
+
+        toast.success(result?.message)
+
+        if(userData?._id===user?._id){
+          dispatch(setCredentials({...result.user}))
+        }
+
+        if (refetchUsers) {
+          refetchUsers();  // 🔁 User list refresh yahin se hoga
+        }
+
+      }
+      else{
+        const result=await addNewUser({...data,password:data.email}).unwrap();
+
+        toast.success("User Added succesfully");
+      }
+      
+      setTimeout(()=>{
+        setOpen(false);
+      },1500);
+
+      
+
+    }catch(error){
+      console.log(error);
+      toast.error("something went wrong");
+    }
+  };
 
   return (
     <ModalWrapper open={open} setOpen={setOpen}>
@@ -66,6 +149,7 @@ const AddUser = ({ open, setOpen, userData }) => {
               required: "Email Address is required!",
             })}
             error={errors.email ? errors.email.message : ""}
+            
           />
 
           <Textbox

@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useRef } from "react";
 
 const ModalWrapper = ({ open, setOpen, children }) => {
-  console.log("ModalWrapper open state:", open);
+  // console.log("ModalWrapper open state:", open);
   const cancelButtonRef = useRef(null);
 
   return (

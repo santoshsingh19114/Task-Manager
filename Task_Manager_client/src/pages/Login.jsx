@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Textbox from "../components/Textbox";
 import Button from "../components/Button";
-import { useSelector } from "react-redux";
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "../redux/slices/apis/authApiSlice";
+import { toast } from "sonner";
+import { setCredentials } from "../redux/Slices/authSlice";
+import Loader from "../components/Loader";
 
 const Login = () => {
   // const user=""
@@ -19,8 +21,21 @@ const Login = () => {
 
   const navigate = useNavigate();
 
+  const dispatch=useDispatch();
+
+  const [login,{isLoading}]=useLoginMutation();
+
   const submithandler=async(data)=>{
-    console.log("submit")
+    try{
+      const result=await login(data).unwrap();
+      dispatch(setCredentials(result))
+      navigate("/")
+      console.log(result);
+    }
+    catch(error){
+      console.log(error)
+      toast.error(error?.data?.message||error.message);
+    }
   }
 
   console.log(user);
@@ -83,25 +98,25 @@ const Login = () => {
 
               <Textbox
               placeholder="Your Password"
-              type="Password"
-              name="Password"
+              type="password"
+              name="password"
               label="Password"
               className="w-full rounded-full"
-              register={register("Password",{
+              register={register("password",{
                 required:"Password is required!"
                 
               })}
-              error={errors.Password?errors.Password.message:""}
+              error={errors.password?errors.password.message:""}
 
               />
 
               <span className="text-sm text-gray-500 hover:text-blue-600 hover:underline cursor-pointer">Forget Password?</span>
 
 
-              <Button
+             {isLoading?(<Loader/>):( <Button
               type='submit'
               label='submit'
-              className='w-full h-10 bg-blue-700 text-white rounded-full'/>
+              className='w-full h-10 bg-blue-700 text-white rounded-full'/>)}
 
             </div>
           </form>
