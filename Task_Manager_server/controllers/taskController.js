@@ -51,7 +51,7 @@ export const createTask = async (req, res) => {
 
 export const duplicateTask = async (req, res) => {
   try {
-    const { id } = req.paramms;
+    const { id } = req.params;
 
     const task = await Task.findById(id);
     const newTask = await Task.create({
@@ -78,9 +78,9 @@ export const duplicateTask = async (req, res) => {
       text +
       `The task priority is set a ${
         task.priority
-      } priority,so check and act accordingly. The task Date is ${task.date.toDatestring()},Thank You!!`;
+      } priority,so check and act accordingly. The task Date is ${task.date.toDateString()},Thank You!!`;
 
-    await Notice.create({ team, text, task: newTask._id });
+    await Notice.create({ team: task.team, text, task: newTask._id });
 
     res
       .status(200)
@@ -298,6 +298,8 @@ export const updateTask = async (req, res) => {
     task.stage = stage;
     task.priority = priority;
     task.assets = assets;
+
+    console.log(task);
 
     await task.save();
 
