@@ -8,7 +8,7 @@ import { user } from "../assets/data";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
   // useEffect(()=>{
   //   console.log( "user is **********-----------" ,user)
   //   dispatch(setCredentials(user))
@@ -32,7 +32,7 @@ const Navbar = () => {
 
             <input type="text" placeholder="search..." className=" flex-1 outline-none bg-transparent placeholder:text-grey-500 text-grey-800 "/>
 
-        </div>
+        </div>  
        </div>
 
        <div className="flex gap-2 items-center">

@@ -134,7 +134,7 @@ export const dashboardStatistics = async (req, res) => {
           .sort({ _id: -1 })
       : await Task.find({
           isTrashed: false,
-          team: { $all: { userId } },
+          team:userId ,
         })
           .populate({
             path: "team",
@@ -198,25 +198,77 @@ export const dashboardStatistics = async (req, res) => {
   }
 };
 
-export const getTasks = async (req, res) => {
-  try {
-    console.log("Query Params:", req.query);
 
-    const { stage, isTrashed } = req.query;
-    console.log(stage);
+
+// export const getTasks = async (req, res) => {
+//   try {
+//     console.log("Query Params:", req.query);
+
+//     const { stage, isTrashed } = req.query;
+//     console.log(stage);
     
 
+//     let query = {};
+
+//     if (typeof isTrashed !== "undefined") {
+//       query.isTrashed = isTrashed === "true"; // string to boolean
+//     }
+
+//     if (stage) {
+//       // Normalize stage value from 'inProgress' to 'in progress'
+//       if (stage === "inProgress") {
+//         query.stage = "in progress";
+//       } else {
+//         query.stage = stage; // Use the exact stage value if it's not 'inProgress'
+//       }
+//     }
+
+//     console.log("Final Query:", query);
+
+//     const tasks = await Task.find(query)
+//       .populate({
+//         path: "team",
+//         select: "name title email",
+//       })
+//       .sort({ _id: -1 });
+
+//     return res.status(200).json({
+//       status: true,
+//       tasks,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(400).json({ status: false, message: error.message });
+//   }
+// };
+
+
+export const getTasks = async (req, res) => {
+  try {
+    const { stage, isTrashed, search } = req.query;
+    
     let query = {};
 
+    // Handle trashed tasks
     if (typeof isTrashed !== "undefined") {
       query.isTrashed = isTrashed === "true"; // string to boolean
     }
 
+    // Handle stage filtering
     if (stage) {
-      query.stage = stage;
+      // Normalize stage value from 'inProgress' to 'in progress'
+      if (stage === "inProgress") {
+        query.stage = "in progress";
+      } else {
+        query.stage = stage; // Use the exact stage value if it's not 'inProgress'
+      }
     }
 
-    console.log("Final Query:", query);
+    // Handle search functionality
+    if (search) {
+      // Use regex to search for task titles (case-insensitive)
+      query.title = { $regex: search, $options: "i" };
+    }
 
     const tasks = await Task.find(query)
       .populate({

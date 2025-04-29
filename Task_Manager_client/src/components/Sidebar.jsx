@@ -30,7 +30,7 @@ const linkData = [
   },
   {
     label: "In Progress",
-    link: "/inProgress/inProgress",
+    link: "inProgress/inProgress",
     icon: <MdOutlinePendingActions />,
   },
   {
