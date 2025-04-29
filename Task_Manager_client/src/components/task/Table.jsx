@@ -15,6 +15,8 @@ import UserInfo from "../UserInfo";
 import moment from "moment";
 import { FaList } from "react-icons/fa";
 import Button from "../Button";
+import { useTrashTaskMutation } from "../../redux/slices/apis/taskApiSlice";
+import AddTask from "./AddTask";
 
 const ICONS = {
   high: <MdKeyboardDoubleArrowUp />,
@@ -25,15 +27,40 @@ const ICONS = {
 const Table = ({ tasks }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [trashTask] = useTrashTaskMutation();
 
-  const deleteClicks=(id)=>{
 
+  const deleteClicks = (id) => {
     setSelected(id);
     setOpenDialog(true);
   };
 
 
-  const deleteHandler=()=>{}
+  const editTaskHandler=(el)=>{
+    setSelected(el);
+    setOpenEdit(true);
+  }
+
+  const deleteHandler = async () => {
+    try {
+      const result = await trashTask({
+        id: selected,
+        isTrash: "trash",
+      }).unwrap();
+
+      toast.success(result?.message);
+
+      setTimeout(() => {
+        setOpenDialog(false);
+        window.location.reload();
+      }, 500);
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+      toast.error(error?.data?.message || "Failed to delete task");
+    }
+  };
 
   const TableHeader = () => (
     <thead className="border-b border-gray-300 ">
@@ -109,18 +136,18 @@ const Table = ({ tasks }) => {
 
       <td className="py-2 flex gap-2 md:gap-4 justify-end">
         <Button
-        className="text-blue-600 hover:text-blue-500  sm:px-0 text-sm md:text-base"
-        label="Edit"
-        type='button'
+          className="text-blue-600 hover:text-blue-500  sm:px-0 text-sm md:text-base"
+          label="Edit"
+          type="button"
+          onClick={()=>editTaskHandler(task)}
         />
         <Button
-        className="text-blue-600 hover:text-blue-500  sm:px-0 text-sm md:text-base"
-        label="Delete"
-        type='button'
-        onClick={()=>deleteClicks(task._id)}
+          className="text-blue-600 hover:text-blue-500  sm:px-0 text-sm md:text-base"
+          label="Delete"
+          type="button"
+          onClick={() => deleteClicks(task._id)}
         />
       </td>
-
     </tr>
   );
 
@@ -139,13 +166,15 @@ const Table = ({ tasks }) => {
         </div>
       </div>
 
-
       <ConfirmatioDialog
         open={openDialog}
         setOpen={setOpenDialog}
         onClick={deleteHandler}
       />
 
+      {openEdit && (
+        <AddTask open={openEdit} setOpen={setOpenEdit} task={selected} />
+      )}
     </>
   );
 };

@@ -24,6 +24,7 @@ const ICONS = {
 const TaskCard = ({ task }) => {
   const { user } = useSelector((state) => state.auth);
   const [open, setOpen] = useState(false);
+  console.log(TASK_TYPE[task.stage]);
   return (
     <>
       <div className="w-full h-fit bg-white shadow-md p-4 rounded">
@@ -38,10 +39,10 @@ const TaskCard = ({ task }) => {
             <span className="uppercase">{task?.priority}priority</span>
           </div>
 
-          {/* {user?.isAdmin && <TaskDialog task={task} />} */}
+          {user?.isAdmin && <TaskDialog task={task} />}
 
           {/* Always show TaskDialog */}
-          {true && <TaskDialog task={task} />}
+          {/* {true && <TaskDialog task={task} />} */}
         </div>
 
         <>
@@ -49,6 +50,7 @@ const TaskCard = ({ task }) => {
             <div
               className={clsx("w-4 h-4 rounded-full ", TASK_TYPE[task.stage])}
             />
+
             <h4 className="line-clamp-1 text-black">{task?.title}</h4>
           </div>
 
@@ -89,7 +91,7 @@ const TaskCard = ({ task }) => {
         </div>
 
         {/* subtask */}
-        
+
         {task?.subtask?.length > 0 ? (
           <div className="py-4 border-t border-gray-200">
             <h5 className="text-base line-clamp-1 text-black">
@@ -97,49 +99,44 @@ const TaskCard = ({ task }) => {
             </h5>
             <div className="p-4 space-x-8">
               <span className="text-sm text-gray-600">
-                {formatDate(new Date(task?.subtask[0]?.date))}</span>
+                {formatDate(new Date(task?.subtask[0]?.date))}
+              </span>
 
-              <span className="bg-blue-600/10 px-3 py-1 rounded-full text-blue-700 font-medium">{task?.subtask[0].tag}</span>
+              <span className="bg-blue-600/10 px-3 py-1 rounded-full text-blue-700 font-medium">
+                {task?.subtask[0].tag}
+              </span>
             </div>
           </div>
         ) : (
           <>
-          <div className="py-4 border-t border-gray-200">
-            <span className=" text-green-500">NO SubTasks</span>
+            <div className="py-4 border-t border-gray-200">
+              <span className=" text-green-500">NO SubTasks</span>
             </div>
           </>
         )}
 
-
         <div className="w-full pb-2">
+          {/* only admin can add task yha pr ek error h ki admin null aa rha  h ya to redux me dikkat h ya to user import ni ho pa rha h data se  */}
 
-            {/* only admin can add task yha pr ek error h ki admin null aa rha  h ya to redux me dikkat h ya to user import ni ho pa rha h data se  */}
-
-
-
-            
+          {user?.isAdmin && (
             <button
-             onClick={()=>setOpen(true)}
-            disabled={user.isAdmin?false:true}
-            className="w-full flex gap-4 items-center text-sm text-gray-500 font-semibold disabled:cursor-not-allowed::text-gray-300">
-                <IoMdAdd className="text-lg"
-               />
-                <span>ADD SUBTASKS</span>
+              onClick={() => setOpen(true)}
+              className="w-full flex gap-4 items-center text-sm text-gray-500 font-semibold"
+            >
+              <IoMdAdd className="text-lg" />
+              <span>ADD SUBTASKS</span>
             </button>
+          )}
 
-            {/* <button 
+          {/* <button 
             className="w-full flex gap-4 items-center text-sm text-gray-500 font-semibold disabled:cursor-not-allowed::text-gray-300">
                 <IoMdAdd className="text-lg"/>
                 <span>ADD SUBTASKS</span>
             </button> */}
-
-            </div>
-
-
-
+        </div>
       </div>
 
-      <AddSubTask open={open} setOpen={setOpen} id={task._id}/>
+      <AddSubTask open={open} setOpen={setOpen} id={task._id} />
     </>
   );
 };

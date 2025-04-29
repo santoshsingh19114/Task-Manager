@@ -203,6 +203,8 @@ export const getTasks = async (req, res) => {
     console.log("Query Params:", req.query);
 
     const { stage, isTrashed } = req.query;
+    console.log(stage);
+    
 
     let query = {};
 
@@ -314,6 +316,7 @@ export const updateTask = async (req, res) => {
 
 export const trashTask = async (req, res) => {
   try {
+    console.log("hii");
     const { id } = req.params;
 
     const task = await Task.findById(id);
@@ -321,6 +324,8 @@ export const trashTask = async (req, res) => {
     task.isTrashed = true;
 
     await task.save();
+
+    return res.status(200).json({ status: true, message: "Task moved to trash successfully" });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ status: false, message: error.message });

@@ -47,13 +47,16 @@ export const taskApiSlice = apiSlice.injectEndpoints({
     }),
 
 
-    trashTask:builder.mutation({
-      query:({id})=>({
-        url:`${TASKS_URL}/${id}`,
-        method:"PUT",
-        credentials:"include",
-      })
+    trashTask: builder.mutation({
+      query: ({ id, isTrash }) => ({
+        url: `${TASKS_URL}/${id}`,
+        method: "PUT",
+        body: { isTrashed: isTrash }, // Make sure the property name matches what you're sending
+        credentials: "include",
+      }),
+      invalidatesTags: ['Tasks', 'TaskStats'] // Add this line to invalidate the Tasks tag
     }),
+    
 
     createSubTask:builder.mutation({
       query:({data, id})=>({
@@ -62,6 +65,35 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         body:data,
         credentials:"include",
     })
+  }),
+
+
+  getSingleTask:builder.query({
+    query:(id)=>({
+      url:`${TASKS_URL}/${id}`,
+      method:"GET",
+      credentials:"include",
+
+    }),
+  }),
+
+
+  postTaskActivity:builder.mutation({
+    query:({data,id})=>({
+      url:`${TASKS_URL}/activity/${id}`,
+      method:"POST",
+      body:data,
+      credentials:"include",
+
+    }),
+  }),
+
+  deleteRestoreTask:builder.mutation({
+    query:({id,actionType})=>({
+      url:`${TASKS_URL}/delete-restore/${id}?actionType=${actionType}`,
+      method:"DELETE",
+      credentials:"include",
+    }),
   }),
 
    
@@ -76,4 +108,7 @@ export const {
   useUpdateTaskMutation,
   useTrashTaskMutation,
   useCreateSubTaskMutation,
+  useGetSingleTaskQuery,
+  usePostTaskActivityMutation,
+  useDeleteRestoreTaskMutation,
 } = taskApiSlice;

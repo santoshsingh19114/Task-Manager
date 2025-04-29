@@ -47,7 +47,7 @@ const Task = () => {
   const status = params?.status || "";
 
 
-  console.log("data query se fecth krne se pehle ")
+  // console.log("data query se fecth krne se pehle ")
 
   const { data, isLoading ,error} = useGetAllTaskQuery({
     strQuery: status,
@@ -56,8 +56,8 @@ const Task = () => {
   });
   
  
-  console.log("data", data);
-console.log("error", error);
+  // console.log("data", data);
+// console.log("error", error);
   // console.log("Status:", status);
 
   return isLoading ? (
@@ -89,7 +89,7 @@ console.log("error", error);
           {!status && (
             <div className="w-full flex justify-between gap-4 md:gap-x-12 py-4">
               <TaskTitle label="ToDo " className={TASK_TYPE.todo} />
-              <TaskTitle label="InProgress " className={TASK_TYPE.inProgress} />
+              <TaskTitle label="In Progress " className={TASK_TYPE["in progress"]} />
               <TaskTitle label="completed " className={TASK_TYPE.completed} />
             </div>
           )}

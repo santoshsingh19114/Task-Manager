@@ -15,6 +15,7 @@ import Loading from "../components/Loader";
 import UserInfo from "../components/UserInfo";
 import { useGetDashboardStatsQuery } from "../redux/slices/apis/taskApiSlice";
 import { BGS, PRIOTITYSTYELS, TASK_TYPE, getInitials } from "../utils";
+import { toast } from "sonner";
 // import { summary } from "../assets/data";
 
 const TaskTable = ({ tasks }) => {
@@ -151,16 +152,21 @@ const Dashboard = () => {
   // const totals = data?.tasks;
 
   const { data, isLoading } = useGetDashboardStatsQuery();
-  console.log(data);
   if (isLoading)
     return (
-      <div className="PY-10">
+  <div className="PY-10">
         <Loading />
       </div>
     );
 
+    console.log(data);
+
   const totals = data?.tasks;
-  console.log(totals);
+  console.log("totals" ,totals);
+
+  if (!totals) {
+    toast.error("Please try logging in again");
+  }
 
   const stats = [
     {
@@ -173,21 +179,21 @@ const Dashboard = () => {
     {
       _id: "2",
       label: "COMPLTED TASK",
-      total: totals["completed"] || 0,
+      total:  totals?.completed || 0,
       icon: <MdAdminPanelSettings />,
       bg: "bg-[#0f766e]",
     },
     {
       _id: "3",
       label: "TASK IN PROGRESS ",
-      total: totals["in progress"] || 0,
+      total: totals?.inprogress || 0,
       icon: <LuClipboard />,
       bg: "bg-[#f59e0b]",
     },
     {
       _id: "4",
       label: "TODOS",
-      total: totals["todo"],
+      total: totals?.todo,
       icon: <FaArrowsToDot />,
       bg: "bg-[#be185d]" || 0,
     },
@@ -231,11 +237,11 @@ const Dashboard = () => {
       <div className="w-full flex flex-col md:flex-row gap-4 2xl:gap-10 py-8">
         {/* /left */}
 
-        <TaskTable tasks={data.last10Task} />
+         {data?.last10Task && <TaskTable tasks={data.last10Task} />}
 
         {/* /right */}
 
-        <UserTable users={data.users} />
+        {data?.users && <UserTable users={data.users} />}
       </div>
     </div>
   );
