@@ -23,7 +23,7 @@ const PORT= process.env.PORT || 5000
 
 app.use(cors({
 
-    origin: ["http://localhost:3000","http://localhost:3001","https://task-manager-pyrate.netlify.app"],
+    origin: ["https://task-manager-vfxg.vercel.app/","http://localhost:3000","http://localhost:3001","https://task-manager-pyrate.netlify.app"],
 
     methods:["GET","PUT","POST","DELETE"],
     credentials: true,
