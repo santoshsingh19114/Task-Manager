@@ -1,6 +1,6 @@
 import { Navigate, Route,Outlet ,Routes, useLocation } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import Task from "./pages/Task";
 import Taskdetail from "./pages/Taskdetail";
 import Trash from "./pages/Trash";
