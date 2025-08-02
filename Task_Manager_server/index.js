@@ -8,7 +8,7 @@ import dbConnection from "./utils/index.js";
 import routes from "./routes/index.js"
 import { errorHandler, routeNotFound } from "./middlewares/errorMiddleware.js";
 
-
+const app=express()
 
 app.get("/", (req, res) => res.send("API is working"));
 
@@ -19,7 +19,7 @@ dbConnection();
 
 const PORT= process.env.PORT || 5000
 
-const app=express()
+
 
 app.use(cors({
 
