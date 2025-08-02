@@ -7,7 +7,7 @@ import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "../redux/slices/apis/authApiSlice";
 import { toast } from "sonner";
-import { setCredentials } from "../redux/Slices/authSlice";
+import { setCredentials } from "../redux/slices/authSlice";
 import Loader from "../components/Loader";
 
 const Login = () => {
