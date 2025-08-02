@@ -129,7 +129,7 @@ export const dashboardStatistics = async (req, res) => {
         })
           .populate({
             path: "team",
-            select: "name role title,email",
+            select: "name role title email",
           })
           .sort({ _id: -1 })
       : await Task.find({
