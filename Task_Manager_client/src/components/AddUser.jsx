@@ -12,10 +12,10 @@ import { useUpdateUserMutation } from "../redux/slices/apis/userApiSlice";
 import { setCredentials } from "../redux/slices/authSlice";
 
 const AddUser = ({ open, setOpen, userData , refetchUsers}) => {
-  console.log("AddUser dialog state:", open);
+  // console.log("AddUser dialog state:", open);
 
   let defaultValues = userData ?? {};
-  console.log("defaultvalues:" ,defaultValues);
+  // console.log("defaultvalues:" ,defaultValues);
   const { user } = useSelector((state) => state.auth);
 
   
@@ -66,16 +66,16 @@ useEffect(() => {
 
       if(userData){
         // userData console.log karke dekh
-console.log("userData:", userData);
+// console.log("userData:", userData);
 
 // data bhi dekh le
-console.log("form data:", data);
+// console.log("form data:", data);
 
-      console.log("handle on submit if ke ander ja rha h ")
+      // console.log("handle on submit if ke ander ja rha h ")
       const result = await updateUser({ ...data, _id: userData._id }).unwrap();
 
 
-      console.log("form data:", { ...data, _id: userData._id });
+      // console.log("form data:", { ...data, _id: userData._id });
         
 
         toast.success(result?.message)
