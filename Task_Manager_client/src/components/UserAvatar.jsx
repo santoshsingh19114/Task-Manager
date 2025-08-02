@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { getInitials } from "../utils";
 import { toast } from "sonner";
 import { useLogoutMutation } from "../redux/slices/apis/authApiSlice";
-import { logout } from "../redux/Slices/authSlice";
+import { logout } from "../redux/slices/authSlice";
 import ChangePassword from "./ChangePassword";
 import AddUser from "./AddUser";
 

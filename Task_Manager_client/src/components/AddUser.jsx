@@ -9,7 +9,7 @@ import Button from "./Button";
 import { toast } from "sonner";
 import { useRegisterMutation } from "../redux/slices/apis/authApiSlice";
 import { useUpdateUserMutation } from "../redux/slices/apis/userApiSlice";
-import { setCredentials } from "../redux/Slices/authSlice";
+import { setCredentials } from "../redux/slices/authSlice";
 
 const AddUser = ({ open, setOpen, userData , refetchUsers}) => {
   console.log("AddUser dialog state:", open);
