@@ -23,9 +23,7 @@ const PORT= process.env.PORT || 5000
 
 app.use(cors({
 
-    origin: [ "https://task-manager-8r4f-oyhlpj7bk-santosh-kumars-projects.vercel.app/",
-  "http://localhost:3000",
-  "http://localhost:3001"],
+    origin:"*",
 
     methods:["GET","PUT","POST","DELETE"],
     credentials: true,
