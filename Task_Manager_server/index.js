@@ -14,40 +14,48 @@ const app = express();
 // Connect to DB
 dbConnection();
 
-// CORS configuration
+// ✅ CORS configuration
 const allowedOrigins = [
-  "http://localhost:3000", // Local frontend
-  "https://task-manager-8r4f-oyhlpj7bk-santosh-kumars-projects.vercel.app", // Replace with your actual Vercel link
+  "http://localhost:3000",
+  "https://task-manager-8r4f-oyhlpj7bk-santosh-kumars-projects.vercel.app",
+  "https://task-manager-8r4f-git-main-santosh-kumars-projects.vercel.app"
+  ,
 ];
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+    origin: (origin, callback) => {
+      console.log("🌐 Incoming Origin:", origin); // Debug log
+      if (!origin) return callback(null, true); // Allow Postman/server calls
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      if (allowedOrigins.includes(normalizedOrigin)) {
         callback(null, true);
       } else {
+        console.log("❌ CORS blocked:", normalizedOrigin);
         callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allows cookies & auth headers
+    credentials: true,
     methods: ["GET", "PUT", "POST", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-// Middleware
+
+// ✅ Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-// Routes
+// ✅ Routes
 app.get("/", (req, res) => res.send("API is working"));
 app.use("/api", routes);
 
-// Error handling
+// ✅ Error handling
 app.use(routeNotFound);
 app.use(errorHandler);
 
-// Start server
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server is listening on ${PORT}`));
