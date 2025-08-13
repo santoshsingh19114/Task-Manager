@@ -9,21 +9,21 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USER_URL}/profile`,
         method: "PUT",
         body: data,
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
     getteamList: builder.query({
       query: () => ({
         url: `${USER_URL}/get-team`,
         method: "GET",
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
         url: `${USER_URL}/${id}`,
         method: "DELETE",
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
     userAction: builder.mutation({
@@ -31,7 +31,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USER_URL}/${data.id}`,
         method: "PUT",
         body: data,
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
 
@@ -39,7 +39,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: `${USER_URL}/notifications`,
         method: "GET",
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
     markNotiAsRead: builder.mutation({
@@ -47,7 +47,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USER_URL}/read-noti?isReadType=${data.type}&id=${data?.id}`,
         method: "PUT",
         body: data,
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
     changePassword: builder.mutation({
@@ -55,7 +55,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
         url: `${USER_URL}/change-password`,
         method: "PUT",
         body: data,
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
   }),

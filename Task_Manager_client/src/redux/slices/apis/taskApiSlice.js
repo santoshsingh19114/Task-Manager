@@ -8,7 +8,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: `${TASKS_URL}/dashboard`,
         method: "GET",
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
 
@@ -16,7 +16,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
       query: ({ strQuery, isTrashed, search }) => ({
         url: `${TASKS_URL}?stage=${strQuery}&isTrashed=${isTrashed}&search=${search}`,
         method: "GET",
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
 
@@ -25,7 +25,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         url: `${TASKS_URL}/create`,
         method: "POST",
         body: data,
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
 
@@ -34,7 +34,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         url: `${TASKS_URL}/duplicate/${id}`,
         method: "POST",
         body: {},
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
     updateTask: builder.mutation({
@@ -42,7 +42,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         url: `${TASKS_URL}/update/${data._id}`,
         method: "PUT",
         body: data,
-        credentials: "include",
+        // credentials: "include",
       }),
     }),
 
@@ -52,7 +52,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         url: `${TASKS_URL}/${id}`,
         method: "PUT",
         body: { isTrashed: isTrash }, // Make sure the property name matches what you're sending
-        credentials: "include",
+        // credentials: "include",
       }),
       invalidatesTags: ['Tasks', 'TaskStats'] // Add this line to invalidate the Tasks tag
     }),
@@ -63,7 +63,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
         url:`${TASKS_URL}/create-subtask/${id}`,
         method:"PUT",
         body:data,
-        credentials:"include",
+        // credentials:"include",
     })
   }),
 
@@ -72,7 +72,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
     query:(id)=>({
       url:`${TASKS_URL}/${id}`,
       method:"GET",
-      credentials:"include",
+      // credentials:"include",
 
     }),
   }),
@@ -83,7 +83,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
       url:`${TASKS_URL}/activity/${id}`,
       method:"POST",
       body:data,
-      credentials:"include",
+      // credentials:"include",
 
     }),
   }),
@@ -92,7 +92,7 @@ export const taskApiSlice = apiSlice.injectEndpoints({
     query:({id,actionType})=>({
       url:`${TASKS_URL}/delete-restore/${id}?actionType=${actionType}`,
       method:"DELETE",
-      credentials:"include",
+      // credentials:"include",
     }),
   }),
 
