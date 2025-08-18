@@ -17,7 +17,7 @@ dbConnection();
 // ✅ CORS configuration
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://task-manager-kd8j.vercel.app/",
+  "https://task-manager-kd8j.vercel.app",
   "https://task-manager-8r4f-oyhlpj7bk-santosh-kumars-projects.vercel.app",
   "https://task-manager-8r4f-git-main-santosh-kumars-projects.vercel.app"
   ,
